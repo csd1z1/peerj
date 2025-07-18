@@ -1,53 +1,56 @@
-Time Series Data Analysis Toolbox
+# Time Series Data Analysis Toolbox
+
 This MATLAB toolbox implements three commonly used time series analysis methods: Gray Relational Analysis (GRA), Sen's Slope Estimator, and Mann-Kendall Trend Test. These methods help analyze and quantify long-term change trends in environmental, ecological, meteorological, and other domains.
 
-Functional Overview
-​​1. Gray Relational Analysis (GRA)​​
+## Functional Overview
 
-Computes association strength between multiple variables and a reference variable
-Performs automatic data normalization
-Supports data reading compatibility across different MATLAB versions
-Visualizes results (normalized data comparison plots, relational coefficient bar charts)
-Automatically sorts and displays association strengths
-​​2. Sen's Slope Estimator​​
+### 1. Gray Relational Analysis (GRA)
+- Computes association strength between multiple variables and a reference variable
+- Performs automatic data normalization
+- Supports data reading compatibility across different MATLAB versions
+- Visualizes results (normalized data comparison plots, relational coefficient bar charts)
+- Automatically sorts and displays association strengths
 
-Non-parametric method to compute slope of long-term trends
-Robust to outliers, suitable for noisy data
-Retains geospatial information in results
-Supports batch processing of multi-year raster data
-​​3. Mann-Kendall Trend Test​​
+### 2. Sen's Slope Estimator
+- Non-parametric method to compute slope of long-term trends
+- Robust to outliers, suitable for noisy data
+- Retains geospatial information in results
+- Supports batch processing of multi-year raster data
 
-Detects monotonic trends in time series data
-Computes trend significance levels
-Combines with Sen's Slope for more reliable trend analysis
-Supports geospatial data processing and visualization
-Installation & Usage
-​​Environment Requirements​​
+### 3. Mann-Kendall Trend Test
+- Detects monotonic trends in time series data
+- Computes trend significance levels
+- Combines with Sen's Slope for more reliable trend analysis
+- Supports geospatial data processing and visualization
 
-MATLAB R2016b or newer
-Mapping Toolbox (for geospatial data processing)
-​​Usage Procedure​​
+## Installation & Usage
 
-Download code files to local directory
-Modify path parameters in code (data input path and result output path)
-Execute the main script file
-​​Example Code​​
+### Environment Requirements
+- MATLAB R2016b or newer
+- Mapping Toolbox (for geospatial data processing)
 
+### Usage Procedure
+1. Download code files to local directory
+2. Modify path parameters in code (data input path and result output path)
+3. Execute the main script file
+
+### Example Code
+matlab
 % Set base paths
 dataPath = 'F:\Data folder\';
 savePath = 'F:\Results folder\';
 
 % Run Sen's Slope analysis
-[a, R][dataPath, '2000.tif']
-[dataPath, '2000.tif']
-[m, n]
+[a, R] = readgeoraster([dataPath, '2000.tif']);
+info = geotiffinfo([dataPath, '2000.tif']);
+[m, n] = size(a);
 
 cd = 2022 - 2000 + 1;
 datasum = zeros(m*n, cd) + NaN;
 
 p = 1;
 for year = 2000:2022
-[dataPath, int2str(year), '.tif']
+    filename = [dataPath, int2str(year), '.tif'];
     data = importdata(filename);
     data = reshape(data, m*n, 1);
     datasum(:, p) = data;
@@ -92,7 +95,7 @@ for i = 1:size(datasum, 1)
     end
 end
 
-vars = cd * (cd-1) * (2*cd+5) / 18;
+vars = cd  (cd-1)  (2*cd+5) / 18;
 zc = zeros(m, n) + NaN;
 
 sy = find(sresult == 0);
@@ -165,7 +168,7 @@ if exist(file_path, 'file')
         d_max = max(data_column);
         d_min = min(data_column);
         a = 0.5;
-        gray_relation = (d_min + a * d_max) ./ (data_column + a * d_max);
+        gray_relation = (d_min + a  d_max) ./ (data_column + a  d_max);
         coefficient = mean(gray_relation);
         gray_coefficients(i-1) = coefficient;
         disp(['x', num2str(i-1), ' and Y1 gray relational coefficient: ', num2str(coefficient)]);
@@ -191,27 +194,41 @@ if exist(file_path, 'file')
         disp(['x', num2str(sorted_idx(i)), ' coefficient: ', num2str(sorted_coeff(i))]);
     end
 else
-['File does not exist: ', file_path]
+    error(['File does not exist: ', file_path]);
 end
-Result Interpretation
-​​Gray Relational Analysis​​
 
-Coefficients closer to 1 indicate stronger similarity between the variable and reference variable's trend
-Bar charts visually compare association strengths
-Sorting helps identify key influencing factors
-​​Sen's Slope & Mann-Kendall Test​​
 
-Combined usage provides trend direction, slope magnitude, and significance levels
-Result raster maps visualize spatial distribution of trends
-Significance testing filters random fluctuations to focus on true trends
-Contribution & Feedback
+## Result Interpretation
+
+### Gray Relational Analysis
+- Coefficients closer to 1 indicate stronger similarity between the variable and reference variable's trend
+- Bar charts visually compare association strengths
+- Sorting helps identify key influencing factors
+
+### Sen's Slope & Mann-Kendall Test
+- Combined usage provides trend direction, slope magnitude, and significance levels
+- Result raster maps visualize spatial distribution of trends
+- Significance testing filters random fluctuations to focus on true trends (95% confidence level)
+
+## Contribution & Feedback
 If you encounter issues or have improvement suggestions, please submit Issues or Pull Requests. We welcome all contributions!
 
-Citation
+## Citation
 If you use this toolbox in research, please appropriately cite the original methodology papers:
 
-​​Gray Relational Analysis​​:Deng, J. L. (1982). Control problems of gray systems. Systems & Control Letters, 1(5), 288-294.
-​​Sen's Slope Estimator​​:Sen, P. K. (1968). Estimates of the regression coefficient based on Kendall's tau. Journal of the American Statistical Association, 63(324), 1379-1389.
-​​Mann-Kendall Test​​:Mann, H. B. (1945). Nonparametric tests against trend. Econometrica: Journal of the Econometric Society, 13(3), 245-259.
-License
-This project is licensed under the MIT License - see the LICENSEfile for details.
+- **Gray Relational Analysis**  
+  Deng, J. L. (1982). Control problems of gray systems. *Systems & Control Letters*, 1(5), 288-294.  
+  [https://doi.org/10.1016/S0167-6911(82)80025-X](https://doi.org/10.1016/S0167-6911(82)80025-X)
+  
+- **Sen's Slope Estimator**  
+  Sen, P. K. (1968). Estimates of the regression coefficient based on Kendall's tau. *Journal of the American Statistical Association*, 63(324), 1379-1389.  
+  [https://doi.org/10.1080/01621459.1968.10480934](https://doi.org/10.1080/01621459.1968.10480934)
+  
+- **Mann-Kendall Test**  
+  Mann, H. B. (1945). Nonparametric tests against trend. *Econometrica*, 13(3), 245-259.  
+  [https://doi.org/10.2307/1907187](https://doi.org/10.2307/1907187)
+
+*Please also consider starring this repository if you find it useful in your research.*
+
+## License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
